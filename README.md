@@ -32,6 +32,7 @@ DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:6543/postgres?pgbouncer=tr
 DIRECT_URL="postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres"
 AUTH_SECRET="replace-with-a-random-secret"
 AUTH_URL="http://localhost:3000"
+AUTH_TRUST_HOST="true"
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
@@ -60,24 +61,28 @@ The schema lives in `prisma/schema.prisma` and includes:
 - Attendance models: `AttendanceRecord`, `AttendanceItem`
 - Enums: `Role`, `AttendanceStatus`
 
-## Deployment Notes
+## Netlify Deployment
 
 1. Create a Supabase project and copy the PostgreSQL connection strings.
-2. Configure the environment variables in your hosting provider.
-3. Run Prisma migrations against Supabase:
+2. In Netlify, set the Node version to `22`. This repository also includes `.node-version` with `22`.
+3. Set the Netlify build command:
 
 ```bash
-npm run prisma:migrate -- --name init
+npm run prisma:deploy && npm run build
 ```
 
-4. Build and deploy:
+4. Add these required environment variables in Netlify from `.env.example`:
 
-```bash
-npm run build
-npm run start
-```
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `AUTH_SECRET`
+- `AUTH_URL`
+- `AUTH_TRUST_HOST`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-For Vercel, set the same environment variables in Project Settings, then deploy the repository. The build script runs `prisma generate` before `next build`.
+5. Deploy the site. The Netlify build command applies Prisma migrations with `prisma migrate deploy`, then runs the Next.js production build.
 
 ## Project Structure
 

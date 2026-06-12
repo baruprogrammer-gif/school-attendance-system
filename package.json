@@ -10,6 +10,7 @@
     "postinstall": "prisma generate || echo \"Prisma generate skipped; configure DATABASE_URL/DIRECT_URL and run npm run prisma:generate\"",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts"
   },
