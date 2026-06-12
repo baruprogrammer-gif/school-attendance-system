@@ -27,7 +27,8 @@ export default async function AttendancePage({
     prisma.teacher.findMany({ include: { user: true }, orderBy: { user: { name: "asc" } } })
   ]);
 
-  const selectedClassId = params.classId ?? classes[0]?.id;
+  const allowedClassIds = new Set(classes.map((schoolClass) => schoolClass.id));
+  const selectedClassId = params.classId && allowedClassIds.has(params.classId) ? params.classId : classes[0]?.id;
   const selectedClass = selectedClassId
     ? await prisma.schoolClass.findUnique({
         where: { id: selectedClassId },

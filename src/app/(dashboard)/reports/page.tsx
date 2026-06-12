@@ -24,7 +24,8 @@ export default async function ReportsPage({
     where: teacher ? { homeroomTeacherId: teacher.id } : undefined,
     orderBy: [{ academicYear: "desc" }, { name: "asc" }]
   });
-  const classId = params.classId ?? classes[0]?.id;
+  const allowedClassIds = new Set(classes.map((schoolClass) => schoolClass.id));
+  const classId = params.classId && allowedClassIds.has(params.classId) ? params.classId : classes[0]?.id;
 
   const items = classId
     ? await prisma.attendanceItem.findMany({

@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BarChart3, BookOpen, CalendarCheck, GraduationCap, History, LayoutDashboard, LogOut, School, Users } from "lucide-react";
+import type { Role } from "@prisma/client";
+import { BarChart3, BookOpen, CalendarCheck, GraduationCap, History, LayoutDashboard, LogOut, School, Users, type LucideIcon } from "lucide-react";
 import { auth, signOut } from "@root/auth";
-import { canManageAttendance, canManageSchool, roleLabels } from "@/lib/roles";
+import { roleLabels } from "@/lib/roles";
 import { initials } from "@/lib/utils";
 
-const baseNav = [
+type NavItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  roles: readonly Role[];
+};
+
+const baseNav: readonly NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["ADMIN", "TEACHER", "STUDENT"] },
   { href: "/attendance", label: "Daily attendance", icon: CalendarCheck, roles: ["ADMIN", "TEACHER"] },
   { href: "/history", label: "History", icon: History, roles: ["ADMIN", "TEACHER", "STUDENT"] },
@@ -13,7 +21,7 @@ const baseNav = [
   { href: "/students", label: "Students", icon: GraduationCap, roles: ["ADMIN"] },
   { href: "/teachers", label: "Teachers", icon: Users, roles: ["ADMIN"] },
   { href: "/classes", label: "Classes", icon: School, roles: ["ADMIN"] }
-] as const;
+];
 
 export async function AppShell({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -82,5 +90,3 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-export { canManageAttendance, canManageSchool };
