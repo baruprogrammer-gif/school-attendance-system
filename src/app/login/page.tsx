@@ -2,6 +2,26 @@ import { auth } from "@root/auth";
 import { redirect } from "next/navigation";
 import { LoginForm } from "./login-form";
 
+function safeCallbackUrl(callbackUrl?: string) {
+  if (!callbackUrl) return "/dashboard";
+
+  try {
+    const parsed = callbackUrl.startsWith("/")
+      ? new URL(callbackUrl, "http://localhost")
+      : new URL(callbackUrl);
+
+    if (parsed.pathname === "/login" || parsed.pathname.startsWith("/api/auth")) {
+      return "/dashboard";
+    }
+
+    parsed.searchParams.delete("callbackUrl");
+
+    return `${parsed.pathname}${parsed.search}`;
+  } catch {
+    return "/dashboard";
+  }
+}
+
 export default async function LoginPage({
   searchParams
 }: {
@@ -23,7 +43,7 @@ export default async function LoginPage({
               Manage classes, daily attendance, reports, and student history from one role-aware dashboard.
             </p>
           </div>
-          <LoginForm callbackUrl={params.callbackUrl ?? "/dashboard"} />
+          <LoginForm callbackUrl={safeCallbackUrl(params.callbackUrl)} />
         </div>
       </section>
       <section className="hidden bg-ink text-white lg:block">

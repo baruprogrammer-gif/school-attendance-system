@@ -15,13 +15,20 @@ A complete MVP for a role-based school attendance app built with Next.js, TypeSc
 
 ## Demo Accounts
 
-All seeded accounts use `password123`.
+All demo accounts use the password `password123`.
 
 | Role | Email |
 | --- | --- |
 | Admin | `admin@school.test` |
 | Teacher | `teacher@school.test` |
 | Student | `student@school.test` |
+
+Extra seeded student accounts are also available:
+
+| Student | Email | Password |
+| --- | --- | --- |
+| Nadia Putri | `nadia@school.test` | `password123` |
+| Bima Wijaya | `bima@school.test` | `password123` |
 
 ## Environment Setup
 
@@ -61,6 +68,27 @@ The schema lives in `prisma/schema.prisma` and includes:
 - Attendance models: `AttendanceRecord`, `AttendanceItem`
 - Enums: `Role`, `AttendanceStatus`
 
+## Supabase SQL Editor Setup
+
+If you do not want to run npm or Prisma locally, open `supabase-setup.sql`, paste it into the Supabase SQL Editor, and run it once on a fresh Supabase database.
+
+The SQL file creates:
+
+- All required enums, tables, indexes, and foreign keys
+- NextAuth-compatible user tables
+- Demo Admin, Teacher, and Student accounts
+- A demo class, three students, and one attendance record
+
+Login credentials after running the SQL:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@school.test` | `password123` |
+| Teacher | `teacher@school.test` | `password123` |
+| Student | `student@school.test` | `password123` |
+
+The SQL uses Supabase/Postgres `pgcrypto` to create bcrypt-compatible password hashes, so no local seed command is required.
+
 ## Netlify Deployment
 
 1. Create a Supabase project and copy the PostgreSQL connection strings.
@@ -90,6 +118,7 @@ npm run prisma:deploy && npm run build
 prisma/
   schema.prisma
   seed.ts
+supabase-setup.sql
 src/
   app/
     (dashboard)/

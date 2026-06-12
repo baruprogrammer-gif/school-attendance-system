@@ -29,7 +29,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
       return;
     }
 
-    router.push(callbackUrl);
+    router.push(callbackUrl.startsWith("/login") ? "/dashboard" : callbackUrl);
     router.refresh();
   }
 
